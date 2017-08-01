@@ -10,7 +10,7 @@ public:
     {
     }
 
-    void set(unsigned int max, float goal)
+    void set(long max, float goal)
     {
         _max = max;
         _is_set = true;
@@ -23,7 +23,7 @@ public:
         return _is_set;
     }
 
-    void update(unsigned int delta,
+    void update(long delta,
                 std::function<void (float)> progress,
                 std::function<void ()> done)
     {
@@ -42,10 +42,10 @@ public:
     }
 
 private:
-    bool         _is_set;
-    unsigned int _max;
-    unsigned int _acc;
-    float        _goal;
+    bool  _is_set;
+    long  _max;
+    long  _acc;
+    float _goal;
 };
 
 }

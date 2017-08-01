@@ -3,16 +3,22 @@
 #include <memory>
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "scene.hpp"
+#include "util/resources.hpp"
+#include "scenes/scenetransition.hpp"
 
 namespace game {
 
 class Director {
 public:
-    Director();
+    Director(std::shared_ptr<Resources> resources);
     void run(sf::RenderWindow &window);
 private:
-    std::shared_ptr<Scene> _scene;
+    void approxFps(long delta);
+
+    SceneTransition _sceneTransition;
+    double          _averageFps;
+    bool            _showFps;
+    sf::Text        _fpsText;
 };
 
 }

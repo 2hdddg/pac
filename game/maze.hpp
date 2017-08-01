@@ -6,28 +6,55 @@
 
 #include "util/animator.hpp"
 #include "game/cell.hpp"
-#include "game/hero.hpp"
+#include "game/levels.hpp"
+#include "game/constants.hpp"
+
 
 namespace game {
 
 class Maze {
 public:
-
-    Maze(unsigned int width, unsigned int height);
+    Maze(struct MazeDefinition *definition);
     void event(sf::Event &event);
-    void update(sf::Time &elapsed);
-    void draw(sf::RenderTarget &target);
+    void render(sf::RenderTarget &target,
+                const sf::Transform &transform);
 
-    std::unique_ptr<Hero> hero;
+    const sf::Vector2f getSizeInPixels() const;
+
+    Cell *heroSpawn;
+    Cell *monsterSpawn;
+
+    int consumed(int x) {
+        _pills--;
+        return _pills;
+    }
+
+    bool isEmpty() {
+        return _pills <= 0;
+    }
 
 private:
-    unsigned int _width;
-    unsigned int _height;
+    /* Connects all cells to it's neighbours and
+     * assigns them their position  */
+    static void connectCells(std::vector<Cell> &cells,
+                             unsigned int width,
+                             unsigned int height);
+    /* Assign tiles to cells according to the definition. */
+    void assignTiles(const struct MazeDefinition *definition,
+                     sf::Texture &texture);
+    /* Connects teleporting cells */
+    void connectTeleports(const struct MazeDefinition *definition);
 
+    Cell* getCell(unsigned int x, unsigned int y) {
+        return &_cells[(y * _width) + x];
+    }
+
+    unsigned int      _width;
+    unsigned int      _height;
     std::vector<Cell> _cells;
-};
+    sf::Texture       _texture;
 
-class Ghost {
+    int               _pills;
 };
 
 }
